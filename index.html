@@ -71,10 +71,9 @@
             <!-- <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i
                     class="fa fa-arrow-right ms-3"></i></a> -->
 
-                    <button type="button" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
-                                    data-bs-toggle="modal" data-bs-target="#myModal">
-                                    Join Now <i
-                                    class="fa fa-arrow-right ms-3"></i></button>
+            <button type="button" id="JoinNOWBTN" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
+                data-bs-toggle="modal" data-bs-target="#myModal">
+                Join Now <i class="fa fa-arrow-right ms-3"></i></button>
         </div>
     </nav>
     <!-- Navbar End -->
@@ -99,9 +98,9 @@
                                     eirmod elitr.</p>
                                 <a href="" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read
                                     More</a>
-                                <button type="button" class="btn btn-light py-md-3 px-md-5 me-3 animated slideInLeft"
-                                    data-bs-toggle="modal" data-bs-target="#myModal">
-                                    Join Now</button>
+                                <a type="button" class="btn btn-light py-md-3 px-md-5 me-3 animated slideInLeft"
+                                    data-bs-toggle="modal" data-bs-target="#myModal" id="JoinNOWBTN2">
+                                    Join Now</a>
                             </div>
                         </div>
                     </div>
@@ -112,11 +111,18 @@
     </div>
     <!-- Carousel End -->
 
+    <div>
+        <iframe id="modalIframe" src="https://forms.amoga.app/applications/1219d98f-7cda-4073-a2be-e9efec173d28"
+            title="W3Schools Free Online Web Tutorials" style="width: 1px; height: 1px"
+            onload="adjustIframeHeight(this)"></iframe>
+    </div>
+
 
     <!-- Service Start -->
 
+
     <div class="modal" id="myModal">
-        <div class="modal-dialog">
+        <div class="modal-dialog" id="modalDialog">
             <div class="modal-content">
 
                 <!-- Modal Header -->
@@ -125,14 +131,12 @@
                 </div>
 
                 <!-- Modal Body -->
-                <div class="modal-body">
-                    <iframe src="https://forms.amoga.app/applications/1219d98f-7cda-4073-a2be-e9efec173d28?height=500" title="W3Schools Free Online Web Tutorials" style="width: 100%;height: 70vh;"></iframe>
-
-
-                    
+                <div class="modal-body" style="width: 100%; height: 70vh;">
+                    <iframe id="modalIframe"
+                        src="https://forms.amoga.app/applications/1219d98f-7cda-4073-a2be-e9efec173d28"
+                        title="W3Schools Free Online Web Tutorials" style="width: 100%; height: 100%;"
+                        onload="adjustIframeHeight(this)"></iframe>
                 </div>
-
-
 
             </div>
         </div>
@@ -638,7 +642,65 @@
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 
 
+
     <!-- JavaScript Libraries -->
+    <script>
+        // Function to handle postMessage event
+        window.addEventListener('message', function (event) {
+            // Check if message is from the expected source
+            if (event.origin === 'https://forms.amoga.app') {
+                // Check if the message is for closing the modal
+                if (event.data.event_type === 'close_modal' || event.data.event_type === 'object_created' ) {
+                    // Close the modal
+                    $('#myModal').modal('hide');
+                }
+            }
+        });
+
+        // Function to set the height parameter in the iframe URL
+        function setIframeHeightParam() {
+            var modalDialogHeight = document.getElementById('modalDialog').clientHeight;
+            console.log('Modal Dialog Height:', document.getElementById('modalDialog'), modalDialogHeight);
+            var modalIframe = document.getElementById('modalIframe');
+            var iframeSrc = modalIframe.src;
+            var updatedSrc = iframeSrc.split('?')[0] + '?height=' + modalDialogHeight;
+            modalIframe.src = updatedSrc;
+
+            setTimeout(() => {
+                modalIframe.src = updatedSrc;
+            }, 500);
+        }
+
+        // Call the function to set the height parameter in the iframe URL
+        setIframeHeightParam();
+
+        // Button click event handler to call setIframeHeightParam() function
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var joinNowButton2 = document.getElementById('JoinNOWBTN2');
+            console.log("joinNowButton2", joinNowButton2)
+            if (joinNowButton2) {
+                joinNowButton2.addEventListener('click', function () {
+                    setIframeHeightParam();
+                });
+            } else {
+                console.error('Button not found!');
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var joinNowButton = document.getElementById('JoinNOWBTN');
+            console.log("joinNowButton", joinNowButton)
+            if (joinNowButton) {
+                joinNowButton.addEventListener('click', function () {
+                    setIframeHeightParam();
+                });
+            } else {
+                console.error('Button not found!');
+            }
+        });
+
+
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/wow/wow.min.js"></script>
